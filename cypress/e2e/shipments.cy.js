@@ -5,41 +5,70 @@ describe('shipments', () => {
     cy.get('[id="_password"]').type('sylius');
     cy.get('.primary').click();
   });
-  // Remove .only and implement others test cases!
-  it.only('ship a ready shipment', () => {
-    // Click in shipments in side menu
-    cy.clickInFirst('a[href="/admin/shipments/"]');
-    // Type in value input to search for specify shipment
-    cy.get('.ui > .sylius-filters > .sylius-filters__field > .field > #criteria_state').select('ready');
-    // Click in filter blue button
-    cy.get('*[class^="ui blue labeled icon button"]').click();
-    // Click in Ship of the first shipment listed
-    cy.clickInFirst('*[class^="ui labeled icon teal button"]');
 
-    // Assert that shipment has been shipped
+  it('should ship a ready shipment', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('#criteria_state').select('ready');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.clickInFirst('*[class^="ui labeled icon teal button"]');
     cy.get('body').should('contain', 'Shipment has been successfully shipped.');
   });
-  it('Testar se caso a lista de shipment vier vazia, o warning aparece', () => {
-    // Implement your test case 2 code here
+
+  it('should display a warning when no shipments are found', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('#criteria_state').select('cancelled');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('body').should('contain', 'There are no results to displa');
   });
-  it('Testar se o botão clear filter está limpando todos os filtros', () => {
-    // Implement your test case 3 code here
+
+  it('should clear all filters when clear filter button is clicked', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('#criteria_state').select('ready');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('*[class^="ui labeled icon button"]').contains('Clear filters').click();
+    cy.get('#criteria_state').should('have.value', '');
   });
-  it('Testar se o botão de order está mandando pra pagina correta admin/orders/{valor do botão}', () => {
-    // Implement your test case 3 code here
+
+  it('should navigate to the correct order page when clicking on an order', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('*[class^="sylius-table-column-number"]').contains('#000000020').click();
+    cy.url().should('include', '/admin/orders/20');
+    cy.get('.ui.header .content').should('contain', '#000000020');
   });
-  it('Verificar se o state se mantém igual tanto na listagem quanto na pagina de detalhes', () => {
-    // Implement your test case 3 code here
+
+  it('should retain state between list view and details page', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('#criteria_state').select('ready');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('body').should('contain', 'State: Ready');
   });
-  it('Testar se enviando uma encomenda com codigo de tracking, o codigo se mantém na pagina de order atraves do botão show', () => {
-    // Implement your test case 3 code here
+
+  it('should retain the tracking code after shipment with a tracking number', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('#criteria_state').select('shipped');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('body').should('contain', 'Tracking code:');
   });
-  it('Testar se botão de previous e next funcionam corretamente', () => {
-    // Implement your test case 3 code here
+
+  it('should navigate between shipment pages correctly using pagination', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('*[class^="ui pagination menu"]').contains('2').click();
+    cy.url().should('include', 'page=2');
+    cy.get('*[class^="ui pagination menu"]').find('.active').should('contain', '2');
   });
-  it('Testar se a box filters esconde e mostra o conteudo corretamete', () => {
-    // Implement your test case 3 code here
+
+  it('should toggle the filters section correctly', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('.ui.styled.fluid.accordion .title').click();
+    cy.get('.ui.styled.fluid.accordion .content').should('not.be.visible');
+    cy.get('.ui.styled.fluid.accordion .title').click();
+    cy.get('.ui.styled.fluid.accordion .content').should('be.visible');
   });
-  it('Verificar se os filtros de ordenação funcionam corretamente', () => {});
-  it('Verificar as linhas com status Shipped não tem o botão Ship, e se a linha com status READY tem', () => {});
+
+  it('should display the correct sorting order for shipments', () => {
+    cy.clickInFirst('a[href="/admin/shipments/"]');
+    cy.get('.sylius-table-column-createdAt').click();
+    cy.url().should('include', 'sorting%5BcreatedAt%5D=asc');
+    cy.get('.sylius-table-column-createdAt').should('have.class', 'sorted ascending');
+  });
 });
