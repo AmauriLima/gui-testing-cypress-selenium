@@ -54,7 +54,6 @@ describe('shipments', () => {
     await driver.findElement(By.linkText('Shipments')).click();
     await driver.findElement(By.xpath('//td/a[contains(text(), "#000000020")]')).click();
     const url = await driver.getCurrentUrl();
-    console.log(url);
     assert(url.includes('/admin/orders/20'));
     const headerText = await driver.findElement(By.css('.ui.header .content')).getText();
     assert(headerText.includes('#000000020'));
