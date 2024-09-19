@@ -43,13 +43,44 @@ describe('shipments', () => {
     assert(bodyText.includes('Shipment has been successfully shipped.'));
   });
 
-  it('test case 2', async () => {
-    // Implement your test case 2 code here
+  it('ship a ready shipment', async () => {
+    // Implement navigation and actions for shipping a ready shipment
   });
 
-  it('test case 3', async () => {
-    // Implement your test case 3 code here
+  it('Testar se caso a lista de shipment vier vazia, o warning aparece', async () => {
+    // Implement navigation and check for empty shipment list warning
   });
 
+  it('Testar se o botão clear filter está limpando todos os filtros', async () => {
+    // Implement test for the "clear filter" button functionality
+  });
+
+  it('Testar se o botão de order está mandando para a página correta admin/orders/{valor do botão}', async () => {
+    // Implement test for correct redirection of the order button
+  });
+
+  it('Verificar se o state se mantém igual tanto na listagem quanto na página de detalhes', async () => {
+    // Implement test to verify that the shipment state remains consistent between listing and detail page
+  });
+
+  it('Testar se enviando uma encomenda com código de tracking, o código se mantém na página de order através do botão show', async () => {
+    // Implement test to check if tracking code is preserved in the order page
+  });
+
+  it('Testar se botão de previous e next funcionam corretamente', async () => {
+    // Implement test for previous and next buttons functionality
+  });
+
+  it('Testar se a box filters esconde e mostra o conteúdo corretamente', async () => {
+    // Implement test to check if the filters box hides and shows content correctly
+  });
+
+  it('Verificar se os filtros de ordenação funcionam corretamente', async () => {
+    // Implement test to verify if sorting filters work properly
+  });
+
+  it('Verificar se as linhas com status Shipped não têm o botão Ship, e se a linha com status READY tem', async () => {
+    // Implement test to check that "Shipped" status rows do not have the "Ship" button, but "READY" status rows do
+  });
   // Implement the remaining test cases in a similar manner
 });
